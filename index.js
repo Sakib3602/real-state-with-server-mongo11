@@ -44,11 +44,25 @@ async function run() {
         res.send(cursor);
     });
     // update the with the patch 
-    app.patch('/update/:id' , async(req,res)=>{
-      const id = req.params.id;
+    // app.patch('/update/:id' , async(req,res)=>{
+    //   const id = req.params.id;
+    //   const {Availability} = req.body;
+    //   console.log(id,Availability)
+    //   const query = { _id : new ObjectId(id)}
+    //   const updateDoc = {
+    //         $set : {Availability},
+    //   }
+    //   const result = await database.updateOne(query,updateDoc)
+    //   res.send(result)
+
+    // })
+
+    // try new thing
+    app.patch('/update/:RoomDescription' , async(req,res)=>{
+      const id = req.params.RoomDescription;
       const {Availability} = req.body;
-      console.log(id,Availability)
-      const query = { _id : new ObjectId(id)}
+      // console.log(id,Availability)
+      const query = { RoomDescription : id}
       const updateDoc = {
             $set : {Availability},
       }
@@ -65,12 +79,21 @@ async function run() {
     })
     // find 
     app.get('/insertItemsAfterBookings', async(req,res)=>{
-      console.log(req.query.email)
+      // console.log(req.query.email)
       const query = {email : req.query?.email}
       const cursor = await databaseBookings.find(query).toArray();
       res.send(cursor)
       
 
+    })
+
+    // delete data
+    app.delete("/delete/:id", async(req,res)=>{
+      const id = req.params.id;
+      console.log(id)
+      const query = { _id : new ObjectId(id) };
+      const result = await databaseBookings.deleteOne(query);
+      res.send(result)
     })
 
     // find one data for deatils page
