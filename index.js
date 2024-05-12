@@ -31,6 +31,7 @@ async function run() {
     await client.connect();
 
     const database = client.db("bookingdb").collection("rooms");
+    const databaseBookings = client.db("bookingdb").collection("bookings");
 
     // get data for home card
     app.get('/homeCard', async (req, res) => {
@@ -53,6 +54,20 @@ async function run() {
       }
       const result = await database.updateOne(query,updateDoc)
       res.send(result)
+
+    })
+    // insertItemsAfterBooking 
+    app.post("/insertItemsAfterBooking", async(req,res)=>{
+      const doc = req.body;
+      const result = await databaseBookings.insertOne(doc);
+      res.send(result);
+
+    })
+    // find 
+    app.get('/insertItemsAfterBookings', async(req,res)=>{
+      const cursor = await databaseBookings.find().toArray();
+      res.send(cursor)
+      
 
     })
 
