@@ -65,7 +65,9 @@ async function run() {
     })
     // find 
     app.get('/insertItemsAfterBookings', async(req,res)=>{
-      const cursor = await databaseBookings.find().toArray();
+      console.log(req.query.email)
+      const query = {email : req.query?.email}
+      const cursor = await databaseBookings.find(query).toArray();
       res.send(cursor)
       
 
