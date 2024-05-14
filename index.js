@@ -31,6 +31,7 @@ async function run() {
     await client.connect();
 
     const database = client.db("bookingdb").collection("rooms");
+    const databaseReview = client.db("bookingdb").collection("reviews");
     const databaseBookings = client.db("bookingdb").collection("bookings");
 
     // get data for home card
@@ -43,19 +44,7 @@ async function run() {
         // console.log(cursor)
         res.send(cursor);
     });
-    // update the with the patch 
-    // app.patch('/update/:id' , async(req,res)=>{
-    //   const id = req.params.id;
-    //   const {Availability} = req.body;
-    //   console.log(id,Availability)
-    //   const query = { _id : new ObjectId(id)}
-    //   const updateDoc = {
-    //         $set : {Availability},
-    //   }
-    //   const result = await database.updateOne(query,updateDoc)
-    //   res.send(result)
-
-    // })
+    // update the with the p
 
     // try new thing
     app.patch('/update/:RoomDescription' , async(req,res)=>{
@@ -106,6 +95,33 @@ async function run() {
       res.send(room);
   });
 
+
+
+  // update from bookings date
+   app.put('/updateDate/:RoomDescription' , async(req,res)=>{
+      const id = req.params.RoomDescription;
+      const {From,To} = req.body;
+      console.log(id,From,To)
+      const query = { RoomDescription : id}
+      const options = { upsert: true };
+      const updateDoc = {
+            $set : {From,To},
+            
+      }
+      
+      const result = await databaseBookings.updateOne(query,updateDoc,options)
+      res.send(result)
+
+    })
+
+
+    // review start
+
+    app.post("/reviewAll", async(req,res)=>{
+      const doc = req.body;
+      const result = await databaseReview.insertOne(doc);
+      res.send(result)
+    })
 
 
 
