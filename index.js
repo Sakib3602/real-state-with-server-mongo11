@@ -5,7 +5,7 @@ const port = process.env.PORT || 4000;
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "http://localhost:5174"],
+    origin: ["http://localhost:5173", "http://localhost:5174", "https://cozi-1.netlify.app"],
     credentials: true,
   })
 );
@@ -43,15 +43,17 @@ async function run() {
     // get data for home card
     app.get("/homeCard", async (req, res) => {
       const sort = req.query.PricePerNight;
-      console.log(req.query.PricePerNight,"scs")
+      console.log(req.query,"scs")
       let options = {};
       if (sort)
-        options = { PricePerNight: { PricePerNight: sort === "des" ? 1 : -1 } };
+        options = { PricePerNight:  sort === "des" ? 1 : -1  };
       // console.log(sort)
-      const cursor = await database.find(options).toArray();
+      const cursor = await database.find().sort(options).toArray();
       // console.log(cursor)
       res.send(cursor);
     });
+
+
     // update the with the p
 
     // try new thing
